@@ -6,7 +6,8 @@ userSchema = mongoose.Schema({
    lastName: String,
    email: String,
    password: String,
-   permissionLevel: Number
+   permissionLevel: Number,
+   groups: [String]
 });
 
 const User = mongoose.model('User', userSchema);

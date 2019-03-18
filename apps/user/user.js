@@ -8,26 +8,10 @@ const registrationHandler = (req, res) => {
   controller.insert(req, res);
 }
 
-// const getByIDHandler = (req, res) => {
-//   controller.getById(req, res);
-// }
-
-const userListHandler = (req, res) => {
-  console.log("HERE");
-  res.send(req);
-}
-
-// const userPatchHandler = (req, res) => {
-//   controller.patchById(req, res);
-// }
-
 
 router.get("/user/get/:userId/", function (req, res) { controller.getById(req, res)});
 router.post("/user/register/", registrationHandler);
-router.post("/user/login/", function (req, res) {
-  controller.login(req, res);
-});
-// router.post("/user/logout/", registrationHandler);
+router.post("/user/login/", function (req, res) { controller.login(req, res) });
 router.get("/user/listem/", function (req, res) { controller.list(req, res)});
 router.patch("/user/patch/:userId", function (req, res) { controller.patchById(req, res)});
 

@@ -38,6 +38,10 @@ router.get("/user/:option1/:option2", user_app);
 router.patch("/user/:option1", user_app);
 router.patch("/user/:option1/:option2", user_app);
 
+let group_app = require("./apps/group/group.js");
+router.post("/group/:option1", group_app);
+router.get("/group/:option1", group_app)
+
 
 router.get("/", function (req, res, next) {
   res.send("server is responding well!")

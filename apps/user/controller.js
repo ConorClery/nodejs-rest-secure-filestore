@@ -35,7 +35,6 @@ module.exports.patchById = (req, res) => {
 };
 
 module.exports.list = (req, res) => {
-    console.log("HEYEYEYEY");
    var token = req.headers['x-access-token'];
    if (!token) return res.status(401).send({auth: false, message: 'No token included'});
    jwt.verify(token, config.JWT_SECRET, function (err, decoded) {
