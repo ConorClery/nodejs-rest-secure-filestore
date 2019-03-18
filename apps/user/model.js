@@ -1,5 +1,5 @@
+//This file sends/saves data to database
 const mongoose = require('mongoose');
-const crypto = require('crypto');
 
 userSchema = mongoose.Schema({
    firstName: String,
@@ -11,25 +11,12 @@ userSchema = mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-const createUser = (userData) => {
+module.exports.createUser = (userData) => {
     const user = new User(userData);
     return user.save();
 };
 
-module.exports.insert = (req, res) => {
-   let salt = crypto.randomBytes(16).toString('base64');
-   let hash = crypto.createHmac('sha512',salt)
-                                    .update(req.body.password)
-                                    .digest("base64");
-   req.body.password = salt + "$" + hash;
-   req.body.permissionLevel = 1;
-   createUser(req.body)
-       .then((result) => {
-           res.status(201).send({id: result._id});
-       });
-};
-
-const findById = (id) => {
+module.exports.findById = (id) => {
     return User.findById(id).then((result) => {
         result = result.toJSON();
         console.log(result);
@@ -39,8 +26,32 @@ const findById = (id) => {
     });
 }
 
-module.exports.getById = (req, res) => {
-   findById(req.params.userId).then((result) => {
-       res.status(200).send(result);
-   });
+exports.patchUser = (id, userData) => {
+    return new Promise((resolve, reject) => {
+        User.findById(id, function (err, user) {
+            if (err) reject(err);
+            for (let i in userData) {
+                user[i] = userData[i];
+            }
+            user.save(function (err, updatedUser) {
+                if (err) return reject(err);
+                resolve(updatedUser);
+            });
+        });
+    })
+};
+
+module.exports.list = (perPage, page) => {
+  return new Promise((resolve, reject) => {
+      User.find()
+          .limit(perPage)
+          .skip(perPage * page)
+          .exec(function (err, users) {
+              if (err) {
+                  reject(err);
+              } else {
+                  resolve(users);
+              }
+          })
+  });
 };

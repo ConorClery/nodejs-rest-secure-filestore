@@ -4,6 +4,8 @@ const https = require('https');
 const privateKey  = fs.readFileSync('ssl/server.key', 'utf8');
 const certificate = fs.readFileSync('ssl/server.crt', 'utf8');
 const bodyParser = require("body-parser");
+const mongoose = require('mongoose');
+const db_options = require('./config.json').DATABASE_OPTIONS;
 
 const credentials = {key: privateKey, cert: certificate};
 const express = require('express');
@@ -20,14 +22,25 @@ app.use(bodyParser.json());
 const httpServer = http.createServer(app);
 const httpsServer = https.createServer(credentials, app);
 
+
+mongoose.connect((db_options.URI_PREFIX + db_options.MONGODB_USER + ":" + db_options.MONGODB_PASS + db_options.URI), { useNewUrlParser: true }, function(err) {
+  if (err) throw err;
+  console.log("DB connected");
+});
+
 router.use(function(req, res, next) {
     console.log(req.method, req.url);
     next();
 });
 
 let user_app = require("./apps/user/user.js");
-router.post("/user/:option", user_app);
-router.get("/user/:option", user_app);
+router.post("/user/:option1", user_app);
+router.post("/user/:option1/:option2", user_app);
+router.get("/user/:option1", user_app);
+router.get("/user/:option1/:option2", user_app);
+router.patch("/user/:option1", user_app);
+router.patch("/user/:option1/:option2", user_app);
+
 
 router.get("/", function (req, res, next) {
   console.log("Client said " + req);
