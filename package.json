@@ -1,0 +1,28 @@
+{
+  "name": "nodejs-rest-secure-filestore",
+  "version": "1.0.0",
+  "description": "Allows users to encrypt and upload files securely to the cloud. Users with a special permission level can decrypt these files.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"test command\"",
+    "dev": "nodemon index.js",
+    "start": "echo \"Run production code to be put here\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ConorClery/nodejs-rest-secure-filestore.git"
+  },
+  "author": "Conor Cleary",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ConorClery/nodejs-rest-secure-filestore/issues"
+  },
+  "homepage": "https://github.com/ConorClery/nodejs-rest-secure-filestore#readme",
+  "devDependencies": {
+    "nodemon": "^1.18.10"
+  },
+  "dependencies": {
+    "express": "^4.16.4",
+    "mongoose": "^5.4.19"
+  }
+}
