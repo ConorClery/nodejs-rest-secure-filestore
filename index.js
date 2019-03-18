@@ -15,14 +15,11 @@ const router = express.Router();
 app.use(bodyParser.urlencoded({
     extended: false
 }));
-
 app.use(bodyParser.json());
 // your express configuration here
 
 const httpServer = http.createServer(app);
 const httpsServer = https.createServer(credentials, app);
-
-
 mongoose.connect((db_options.URI_PREFIX + db_options.MONGODB_USER + ":" + db_options.MONGODB_PASS + db_options.URI), { useNewUrlParser: true }, function(err) {
   if (err) throw err;
   console.log("DB connected");
@@ -43,13 +40,10 @@ router.patch("/user/:option1/:option2", user_app);
 
 
 router.get("/", function (req, res, next) {
-  console.log("Client said " + req);
-  next()
-}, function(req, res) {
   res.send("server is responding well!")
 });
 
-app.use('/', router);
 
+app.use('/', router);
 httpServer.listen(8080, '0.0.0.0');
 httpsServer.listen(8443, '0.0.0.0');

@@ -10,7 +10,7 @@ userSchema = mongoose.Schema({
 });
 
 const User = mongoose.model('User', userSchema);
-
+module.exports.User = User;
 module.exports.createUser = (userData) => {
     const user = new User(userData);
     return user.save();

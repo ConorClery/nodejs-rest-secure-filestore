@@ -24,7 +24,9 @@ const userListHandler = (req, res) => {
 
 router.get("/user/get/:userId/", function (req, res) { controller.getById(req, res)});
 router.post("/user/register/", registrationHandler);
-// router.post("/user/login/", loginHandler);
+router.post("/user/login/", function (req, res) {
+  controller.login(req, res);
+});
 // router.post("/user/logout/", registrationHandler);
 router.get("/user/listem/", function (req, res) { controller.list(req, res)});
 router.patch("/user/patch/:userId", function (req, res) { controller.patchById(req, res)});
