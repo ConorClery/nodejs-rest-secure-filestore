@@ -57,7 +57,6 @@ module.exports.login = (req, res) => {
     model.User.findOne({email:req.body.email}, function (err, user) {
       if (err) return res.status(500).send("Internal server error");
       if (!user) return res.status(404).send("Email not registered");
-      console.log(user);
       let pass_on_record = user.password.split('$');
       let salt = pass_on_record[0];
       let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest("base64");

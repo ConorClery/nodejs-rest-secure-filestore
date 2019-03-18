@@ -1,4 +1,5 @@
 const model = require('./model.js');
+const userModel = require('../user/model.js')
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const config = require('../../config.json');
@@ -13,7 +14,9 @@ module.exports.createGroup = (req, res) => {
         groupData.members = user.userId;
         groupData.symmetricKey = crypto.randomBytes(16).toString('base64');
         model.createGroup(groupData).then((result) => {
-            res.status(201).send(result);
+            userModel.appendGroupsList(user.userId, result._id).then((updatedUser) => {
+                res.status(201).send(result);
+            });
         });
     }
 };

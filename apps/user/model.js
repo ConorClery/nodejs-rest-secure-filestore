@@ -27,6 +27,20 @@ module.exports.findById = (id) => {
     });
 }
 
+exports.appendGroupsList = (id, group_id) => {
+  return new Promise((resolve, reject) => {
+    User.findById(id, function (err, user) {
+        if (err) reject(err);
+        var list = user.groups;
+        list.push(group_id)
+        user.save(function (err, updatedUser) {
+            if (err) return reject(err);
+            resolve(updatedUser);
+        });
+    });
+  });
+}
+
 exports.patchUser = (id, userData) => {
     return new Promise((resolve, reject) => {
         User.findById(id, function (err, user) {
