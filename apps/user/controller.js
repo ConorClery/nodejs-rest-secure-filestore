@@ -11,11 +11,23 @@ module.exports.insert = (req, res) => {
                                     .digest("base64");
    req.body.password = salt + "$" + hash;
    req.body.permissionLevel = 1;
+   console.log(req.body);
    model.createUser(req.body)
        .then((result) => {
            res.status(201).send({id: result._id});
        });
 };
+
+module.exports.getUserPublicKey = (req, res) => {
+    var user = authenticate(req, res);
+    if (user) {
+        console.log(user);
+        console.log("authenticated");
+        model.findById(req.body.id_to_query).then((result) => {
+            res.status(200).send({userId: req.body.id_to_query, publicKey: result.publicKey});
+        });
+    }
+}
 
 module.exports.getById = (req, res) => {
    model.findById(req.params.userId).then((result) => {
@@ -85,3 +97,14 @@ module.exports.login = (req, res) => {
 
     });
 }
+
+const authenticate = (req, res) => {
+  var user;
+  var token = req.headers['x-access-token'];
+  if (!token) return res.status(401).send({auth: false, message: 'No token included'});
+  return jwt.verify(token, config.JWT_SECRET, function (err, decoded) {
+    if (err) return res.status(500).send({auth: false, message: "Failed to authenticate token"});
+    user = jwt.verify(token, config.JWT_SECRET);
+    return user;
+  });
+};

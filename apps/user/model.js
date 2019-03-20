@@ -7,7 +7,8 @@ userSchema = mongoose.Schema({
    email: String,
    password: String,
    permissionLevel: Number,
-   groups: [String]
+   groups: [String],
+   publicKey: String
 });
 
 const User = mongoose.model('User', userSchema);

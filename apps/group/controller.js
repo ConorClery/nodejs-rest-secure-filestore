@@ -11,15 +11,34 @@ module.exports.createGroup = (req, res) => {
         console.log("authenticated");
         var groupData = {};
         groupData.ownerId = user.userId;
-        groupData.members = user.userId;
-        groupData.symmetricKey = crypto.randomBytes(16).toString('base64');
+        groupData.members = {user_id: user.userId, encrypted_symmetric: req.body.symmetricKey};
         model.createGroup(groupData).then((result) => {
-            userModel.appendGroupsList(user.userId, result._id).then((updatedUser) => {
                 res.status(201).send(result);
-            });
         });
     }
 };
+
+module.exports.findUserOwnedGroups = (req, res) => {
+    var user = authenticate(req, res);
+    if (user) {
+        console.log(user);
+        console.log("authenticated");
+        model.findUserOwnedGroups(user.userId).then((result) => {
+            res.status(200).send(result);
+        });
+    }
+}
+
+module.exports.addUserToMastersGroup = (req, res) => {
+    var user = authenticate(req, res);
+    if (user) {
+        console.log(user);
+        console.log("authenticated");
+        model.appendMembersList({user_id: req.body.id_to_add, encrypted_symmetric: req.body.new_user_encrypted_symmetric}, req.body.group_id).then((result) => {
+          res.status(200).send(result);
+        });
+    }
+}
 
 module.exports.list = (req, res) => {
     var user = authenticate(req, res);

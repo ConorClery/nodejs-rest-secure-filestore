@@ -14,6 +14,6 @@ router.post("/user/register/", registrationHandler);
 router.post("/user/login/", function (req, res) { controller.login(req, res) });
 router.get("/user/listem/", function (req, res) { controller.list(req, res)});
 router.patch("/user/patch/:userId", function (req, res) { controller.patchById(req, res)});
-
+router.get("/user/getPublicKeyById/", function (req, res) { controller.getUserPublicKey(req, res) });
 
 module.exports = router;
