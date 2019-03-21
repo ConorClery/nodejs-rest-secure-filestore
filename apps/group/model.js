@@ -58,3 +58,16 @@ module.exports.findUserOwnedGroups = (user_id) => {
         })
   });
 };
+
+module.exports.findUserMemberGroups = (email) => {
+  return new Promise((resolve, reject) => {
+    Group.find({members: {$elemMatch: {email: email}}})
+        .exec(function (err, groups) {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(groups);
+            }
+        })
+  });
+};

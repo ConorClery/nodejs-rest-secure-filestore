@@ -23,8 +23,8 @@ module.exports.getUserPublicKey = (req, res) => {
     if (user) {
         console.log(user);
         console.log("authenticated");
-        model.findById(req.body.id_to_query).then((result) => {
-            res.status(200).send({userId: req.body.id_to_query, publicKey: result.publicKey});
+        model.findByEmail({email: req.body.email}).then((result) => {
+            res.status(200).send({userId: result.email, publicKey: result.publicKey});
         });
     }
 }
@@ -88,7 +88,7 @@ module.exports.login = (req, res) => {
              let token = jwt.sign(req.body, config.JWT_SECRET);
              let b = new Buffer(hash);
              let refresh_token = b.toString('base64');
-             res.status(201).send({accessToken: token, refreshToken: refresh_token});
+             res.status(201).send({userId: req.body.userId, email:req.body.email, omaccessToken: token, refreshToken: refresh_token});
          } catch (err) {
              console.error(err);
              res.status(500).send({errors: err});

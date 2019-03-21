@@ -11,7 +11,7 @@ module.exports.createGroup = (req, res) => {
         console.log("authenticated");
         var groupData = {};
         groupData.ownerId = user.userId;
-        groupData.members = {user_id: user.userId, encrypted_symmetric: req.body.symmetricKey};
+        groupData.members = {user_id: user.userId, email:user.email, encrypted_symmetric: req.body.symmetricKey};
         model.createGroup(groupData).then((result) => {
                 res.status(201).send(result);
         });
@@ -34,11 +34,21 @@ module.exports.addUserToMastersGroup = (req, res) => {
     if (user) {
         console.log(user);
         console.log("authenticated");
-        model.appendMembersList({user_id: req.body.id_to_add, encrypted_symmetric: req.body.new_user_encrypted_symmetric}, req.body.group_id).then((result) => {
+        model.appendMembersList({email: req.body.email, user_id:user.userId, encrypted_symmetric: req.body.new_user_encrypted_symmetric}, req.body.group_id).then((result) => {
           res.status(200).send(result);
         });
     }
 }
+
+module.exports.getUserGroups = (req, res) => {
+  var user = authenticate(req, res);
+  if (user) {
+      console.log("authenticated");
+      model.findUserMemberGroups(user.email).then((result) => {
+        res.status(200).send(result);
+      });
+  }
+};
 
 module.exports.list = (req, res) => {
     var user = authenticate(req, res);
@@ -51,6 +61,7 @@ module.exports.list = (req, res) => {
 };
 
 const authenticate = (req, res) => {
+  console.log(req.headers);
   var user;
   var token = req.headers['x-access-token'];
   if (!token) return res.status(401).send({auth: false, message: 'No token included'});

@@ -18,6 +18,19 @@ module.exports.createUser = (userData) => {
     return user.save();
 };
 
+module.exports.findByEmail = (email) => {
+  return new Promise((resolve, reject) => {
+    User.findOne(email)
+        .exec(function (err, user) {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(user);
+            }
+        })
+  });
+};
+
 module.exports.findById = (id) => {
     return User.findById(id).then((result) => {
         result = result.toJSON();
