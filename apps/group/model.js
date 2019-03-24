@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 groupSchema = mongoose.Schema({
    ownerId: String,
+   groupName: String,
    members: [],
    mediaLinks: [String]
 });
@@ -70,4 +71,18 @@ module.exports.findUserMemberGroups = (email) => {
             }
         })
   });
+};
+
+module.exports.patchGroupMedia = (id, link) => {
+    return new Promise((resolve, reject) => {
+        Group.findById(id, function (err, group) {
+            if (err) reject(err);
+            var media = group.mediaLinks;
+            media.push(link);
+            group.save(function (err, updatedGroup) {
+                if (err) return reject(err);
+                resolve(updatedGroup.mediaLinks);
+            });
+        });
+    })
 };

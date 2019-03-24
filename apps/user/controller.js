@@ -79,6 +79,7 @@ module.exports.login = (req, res) => {
             permissionLevel: user.permissionLevel,
             provider: 'email',
             name: user.firstName + ' ' + user.lastName,
+            publicKey: user.publicKey
         };
         try {
              let refreshId = req.body.userId + config.JWT_SECRET;
@@ -88,7 +89,7 @@ module.exports.login = (req, res) => {
              let token = jwt.sign(req.body, config.JWT_SECRET);
              let b = new Buffer(hash);
              let refresh_token = b.toString('base64');
-             res.status(201).send({userId: req.body.userId, email:req.body.email, omaccessToken: token, refreshToken: refresh_token});
+             res.status(201).send({userId: req.body.userId, publicKey: req.body.publicKey, email:req.body.email, omaccessToken: token, refreshToken: refresh_token});
          } catch (err) {
              console.error(err);
              res.status(500).send({errors: err});

@@ -7,5 +7,6 @@ router.post('/group/addUserToMastersGroup/', function (req, res) { controller.ad
 router.post('/group/create/', function (req, res) { controller.createGroup(req, res) });
 router.get('/group/list/', function (req, res) { controller.list(req, res) });
 router.get('/group/findGroupById/', function (req, res) { controller.findUserOwnedGroups(req, res) })
+router.patch('/group/mediaLinks/', function (req, res) { controller.updateGroupMedia(req, res) });
 
 module.exports = router;

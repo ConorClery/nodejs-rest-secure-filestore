@@ -11,6 +11,7 @@ module.exports.createGroup = (req, res) => {
         console.log("authenticated");
         var groupData = {};
         groupData.ownerId = user.userId;
+        groupData.groupName = req.body.groupName;
         groupData.members = {user_id: user.userId, email:user.email, encrypted_symmetric: req.body.symmetricKey};
         model.createGroup(groupData).then((result) => {
                 res.status(201).send(result);
@@ -57,6 +58,16 @@ module.exports.list = (req, res) => {
         model.list().then((result) => {
           res.status(200).send(result);
         });
+    }
+};
+
+module.exports.updateGroupMedia = (req, res) => {
+    var user = authenticate(req, res);
+    if (user) {
+      console.log("authenticated");
+      model.patchGroupMedia(req.body.groupId, req.body.link).then((result) => {
+        res.status(200).send(result);
+      });
     }
 };
 
